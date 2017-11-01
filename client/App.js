@@ -11,7 +11,9 @@ const location = history.location;
 class App extends Component {
   constructor() {
     super()
-    this.state ={username:'', password:'' ,isAuth: false, };
+    this.search = this.search.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
+    this.state ={username:'', password:'' ,isAuth: false, searchTerm: '', listOfJObs: [], username:'', password:'' ,isAuth: false};
     //changes state of input
      this.onUsernameChange = this.onUsernameChange.bind(this);
      this.onPasswordChange = this.onPasswordChange.bind(this);
@@ -24,6 +26,33 @@ class App extends Component {
   }
   onPasswordChange(event){
     this.setState({password: event.target.value});
+  }
+
+  onSearchChange (event) {
+    this.setState({ searchTerm: event.target.value });
+  }
+
+  search () {
+    // let body = { searchterm: "developer" };
+    // if (!this.state.searchTerm) return; 
+    let body = { searchterm: this.state.searchTerm };
+    fetch ('/searchbar', {
+      method: 'post',
+      body: JSON.stringify(body),
+      headers: { "Content-Type": "application/json" }
+    })
+    .then( resp => {
+      console.log('hey');
+      console.log(resp);
+      // if (resp.status === 200) {
+      //   console.log(resp.json());
+      //   this.setState({listOfJobs: resp.json()})
+      // }
+      // if (resp.status === 404) {
+      //   console.log(err);
+      // }
+      return resp.json();
+    }).then(data=>console.log(data)).catch( err => console.log(err) );
   }
 
   logIntoPage(){
@@ -53,11 +82,11 @@ class App extends Component {
   }
   render () {
     return (
-      <BrowserRouter>
+      <BrowserRouter >
         <Switch>
           <Route exact path="/" render={ () => ( <LoginScreen logIntoPage={this.logIntoPage} onPasswordChange={this.onPasswordChange} onUsernameChange={this.onUsernameChange}/> ) } />
           <Route path="/register" render={ () => {} } />
-          <PrivateRoute path="/home" component={Homepage} isAuth={this.state.isAuth} />
+          <PrivateRoute path="/home" component={Homepage} isAuth={true} search={this.search} onSearchChange={this.onSearchChange} />
         </Switch>
       </BrowserRouter>
     )

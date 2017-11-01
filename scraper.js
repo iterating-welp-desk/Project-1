@@ -33,10 +33,11 @@ async function run(SEARCH_QUERY) {
   /* * * * * 
     wait for all selectors and btn to be on page
   * * * * */
-  await page.waitForSelector(EMAIL_SELECTOR).catch(err => console.log(err));
-  await page.waitForSelector(PW_SELECTOR).catch(err => console.log(err));
-  await page.waitForSelector(SIGNIN_BTN).catch(err => console.log(err));
-  await page.waitForSelector('#SignInModule');
+  await page.waitFor(3000).catch(err => console.log(err));
+  // await page.waitForSelector(EMAIL_SELECTOR).catch(err => console.log(err));
+  // await page.waitForSelector(PW_SELECTOR).catch(err => console.log(err));
+  // await page.waitForSelector(SIGNIN_BTN).catch(err => console.log(err));
+  // await page.waitForSelector('#SignInModule');
   await page.click(EMAIL_SELECTOR).catch(err => console.log(err));
   await page.keyboard.type(CREDS.email).catch(err => console.log(err));
   await page.click(PW_SELECTOR).catch(err => console.log(err));
@@ -196,12 +197,11 @@ async function run(SEARCH_QUERY) {
     if (succExists) EASYAPPLYJOBS[i].applied = true;
     else EASYAPPLYJOBS[i].applied = false;
   };
-  //console.log(EASYAPPLYJOBS);
+  console.log(EASYAPPLYJOBS);
 
   browser.close();
   return EASYAPPLYJOBS;
 } 
-
-// s
+// run('developer');
 
 module.exports = run;
