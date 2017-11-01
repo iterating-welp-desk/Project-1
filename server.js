@@ -7,6 +7,9 @@ const userController = require('./controllers/userController');
 const searchController = require('./controllers/searchController');
 const path = require('path');
 const fetch = require('node-fetch');
+
+const runScraper = require('./scraper.js');
+
 const passport = require('./passport.js');
 /* * * * * 
   Express session makes the session object accessible to by putting it on the request object as req.session (json object)
@@ -61,8 +64,12 @@ const User = require('./db/userModel.js');
 
 appl.post('/signup', userController.createUser);
 
-
-
+appl.post('/searchbar', async (req, res) => {
+  const data = await runScraper(req.body.searchterm);
+  console.log(data);
+  if (data) res.status(200).json(JSON.stringify(data));
+  else res.status(404);
+});
 
 
 

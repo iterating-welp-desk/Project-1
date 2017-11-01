@@ -5,7 +5,7 @@ const util = require('util');
 // const moongoose = require('mongoose');
 // const User = require('./models/user'); 
 
-async function run() {
+async function run(SEARCH_QUERY) {
   // instantiating a browser - with property headless: false (so we can see it working)
   // By default, it is true. 
   const browser = await puppeteer.launch({
@@ -33,10 +33,11 @@ async function run() {
   /* * * * * 
     wait for all selectors and btn to be on page
   * * * * */
-  await page.waitForSelector(EMAIL_SELECTOR).catch(err => console.log(err));
-  await page.waitForSelector(PW_SELECTOR).catch(err => console.log(err));
-  await page.waitForSelector(SIGNIN_BTN).catch(err => console.log(err));
-  await page.waitForSelector('#SignInModule');
+  await page.waitFor(3000).catch(err => console.log(err));
+  // await page.waitForSelector(EMAIL_SELECTOR).catch(err => console.log(err));
+  // await page.waitForSelector(PW_SELECTOR).catch(err => console.log(err));
+  // await page.waitForSelector(SIGNIN_BTN).catch(err => console.log(err));
+  // await page.waitForSelector('#SignInModule');
   await page.click(EMAIL_SELECTOR).catch(err => console.log(err));
   await page.keyboard.type(CREDS.email).catch(err => console.log(err));
   await page.click(PW_SELECTOR).catch(err => console.log(err));
@@ -46,7 +47,7 @@ async function run() {
 
   await page.waitForNavigation().catch(err => console.log(err));
 
-  const SEARCH_QUERY = 'java developer';
+  // const SEARCH_QUERY = 'java developer';
   const URL = `https://www.glassdoor.com/Job/jobs.htm?clickSource=searchBtn&typedKeyword=${SEARCH_QUERY}&sc.keyword=${SEARCH_QUERY}`;
   
   await page.goto(URL).catch(err => console.log(err));
@@ -196,9 +197,11 @@ async function run() {
     if (succExists) EASYAPPLYJOBS[i].applied = true;
     else EASYAPPLYJOBS[i].applied = false;
   };
-  //console.log(EASYAPPLYJOBS);
+  console.log(EASYAPPLYJOBS);
 
   browser.close();
+  return EASYAPPLYJOBS;
 } 
+// run('developer');
 
-run();
+module.exports = run;
