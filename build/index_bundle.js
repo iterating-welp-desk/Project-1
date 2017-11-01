@@ -2466,21 +2466,43 @@ var App = function (_Component) {
 
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
+    _this.state = { searchTerm: '', listOfJObs: [] };
     _this.search = _this.search.bind(_this);
+    _this.onSearchChange = _this.onSearchChange.bind(_this);
+
     return _this;
   }
 
   _createClass(App, [{
+    key: 'onSearchChange',
+    value: function onSearchChange(event) {
+      this.setState({ searchTerm: event.target.value });
+    }
+  }, {
     key: 'search',
     value: function search() {
-      console.log('hey');
+      // let body = { searchterm: "developer" };
+      // if (!this.state.searchTerm) return; 
+      var body = { searchterm: this.state.searchTerm };
       fetch('/searchbar', {
-        method: 'POST',
-        body: {
-          searchterm: "developer"
-        }
+        method: 'post',
+        body: JSON.stringify(body),
+        headers: { "Content-Type": "application/json" }
       }).then(function (resp) {
-        return console.log(resp);
+        console.log('hey');
+        console.log(resp);
+        // if (resp.status === 200) {
+        //   console.log(resp.json());
+        //   this.setState({listOfJobs: resp.json()})
+        // }
+        // if (resp.status === 404) {
+        //   console.log(err);
+        // }
+        return resp.json();
+      }).then(function (data) {
+        return console.log(data);
+      }).catch(function (err) {
+        return console.log(err);
       });
     }
   }, {
@@ -2496,7 +2518,7 @@ var App = function (_Component) {
               return _react2.default.createElement(_LoginScreen2.default, null);
             } }),
           _react2.default.createElement(_reactRouterDom.Route, { path: '/register', render: function render() {} }),
-          _react2.default.createElement(_PrivateRoute2.default, { path: '/home', component: _Homepage2.default, isAuth: true, search: this.search })
+          _react2.default.createElement(_PrivateRoute2.default, { path: '/home', component: _Homepage2.default, isAuth: true, search: this.search, onSearchChange: this.onSearchChange })
         )
       );
     }
@@ -25663,6 +25685,8 @@ module.exports = performance || {};
 "use strict";
 
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
@@ -25681,15 +25705,36 @@ var _Searchbar2 = _interopRequireDefault(_Searchbar);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var Homepage = function Homepage() {
-    return _react2.default.createElement(
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Homepage = function (_Component) {
+  _inherits(Homepage, _Component);
+
+  function Homepage(props) {
+    _classCallCheck(this, Homepage);
+
+    return _possibleConstructorReturn(this, (Homepage.__proto__ || Object.getPrototypeOf(Homepage)).call(this, props));
+  }
+
+  _createClass(Homepage, [{
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
         'div',
         { className: 'Homepage' },
-        _react2.default.createElement(_Searchbar2.default, { search: undefined.props.search }),
+        _react2.default.createElement(_Searchbar2.default, { search: this.props.search, onSearchChange: this.props.onSearchChange }),
         _react2.default.createElement(_List2.default, { title: 'Relevant Jobs' }),
         _react2.default.createElement(_List2.default, { title: 'You have Applied To These Jobs:' })
-    );
-};
+      );
+    }
+  }]);
+
+  return Homepage;
+}(_react.Component);
 
 module.exports = Homepage;
 
@@ -25762,24 +25807,47 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var SearchBar = function SearchBar() {
-  return _react2.default.createElement(
-    "div",
-    null,
-    _react2.default.createElement("input", { type: "text", "class": "searchTerm", placeholder: "What are you looking for?" }),
-    _react2.default.createElement(
-      "button",
-      { onClick: undefined.props.search },
-      "Search"
-    )
-  );
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SearchBar = function (_Component) {
+  _inherits(SearchBar, _Component);
+
+  function SearchBar(props) {
+    _classCallCheck(this, SearchBar);
+
+    return _possibleConstructorReturn(this, (SearchBar.__proto__ || Object.getPrototypeOf(SearchBar)).call(this, props));
+  }
+
+  _createClass(SearchBar, [{
+    key: "render",
+    value: function render() {
+      return _react2.default.createElement(
+        "div",
+        null,
+        _react2.default.createElement("input", { type: "text", className: "searchTerm", placeholder: "What are you looking for?", onChange: this.props.onSearchChange }),
+        _react2.default.createElement(
+          "button",
+          { onClick: this.props.search },
+          "Search"
+        )
+      );
+    }
+  }]);
+
+  return SearchBar;
+}(_react.Component);
 
 exports.default = SearchBar;
 

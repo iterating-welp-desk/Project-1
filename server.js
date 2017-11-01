@@ -57,12 +57,12 @@ const User = require('./db/userModel.js');
 
 appl.post('/signup', userController.createUser);
 
-appl.post('/searchbar', (req, res) => {
-  console.log(req);
-  res.send(runScraper(req.body.searchterm));
+appl.post('/searchbar', async (req, res) => {
+  const data = await runScraper(req.body.searchterm);
+  console.log(data);
+  if (data) res.status(200).json(JSON.stringify(data));
+  else res.status(404);
 });
-
-
 
 
 
