@@ -5,10 +5,10 @@ import Searchbar from './Searchbar'
 
 const Homepage = () => {
     return (
-        <div className="Homepage">
-            <Searchbar />
-            <List title ={'Relevant Jobs'}/>
-            <List title = {'You have Applied To These Jobs:'}/>
+        <div className = "Homepage">
+            <Searchbar search={this.props.search}/>
+            <List title = {'Relevant Jobs'} />
+            <List title = {'You have Applied To These Jobs:'} />
         </div>
     )
 }

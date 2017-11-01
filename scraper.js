@@ -5,7 +5,7 @@ const util = require('util');
 // const moongoose = require('mongoose');
 // const User = require('./models/user'); 
 
-async function run() {
+async function run(SEARCH_QUERY) {
   // instantiating a browser - with property headless: false (so we can see it working)
   // By default, it is true. 
   const browser = await puppeteer.launch({
@@ -46,7 +46,7 @@ async function run() {
 
   await page.waitForNavigation().catch(err => console.log(err));
 
-  const SEARCH_QUERY = 'java developer';
+  // const SEARCH_QUERY = 'java developer';
   const URL = `https://www.glassdoor.com/Job/jobs.htm?clickSource=searchBtn&typedKeyword=${SEARCH_QUERY}&sc.keyword=${SEARCH_QUERY}`;
   
   await page.goto(URL).catch(err => console.log(err));
@@ -199,6 +199,9 @@ async function run() {
   //console.log(EASYAPPLYJOBS);
 
   browser.close();
+  return EASYAPPLYJOBS;
 } 
 
-run();
+// s
+
+module.exports = run;

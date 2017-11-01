@@ -9,7 +9,17 @@ import PrivateRoute from './PrivateRoute.js';
 class App extends Component {
   constructor() {
     super();
+    this.search = this.search.bind(this);
+  }
 
+  search () {
+    console.log('hey');
+    fetch ('/searchbar', {
+      method: 'POST',
+      body: {
+        searchterm: "developer",
+      }
+    }).then(resp=>console.log(resp));
   }
 
   render () {
@@ -18,7 +28,7 @@ class App extends Component {
         <Switch>
           <Route exact path="/" render={ () => ( <LoginScreen /> ) } />
           <Route path="/register" render={ () => {} } />
-          <PrivateRoute path="/home" component={Homepage} isAuth={true} />
+          <PrivateRoute path="/home" component={Homepage} isAuth={true} search={this.search}/>
         </Switch>
       </BrowserRouter>
     )

@@ -2442,11 +2442,11 @@ var _Homepage = __webpack_require__(77);
 
 var _Homepage2 = _interopRequireDefault(_Homepage);
 
-var _LoginScreen = __webpack_require__(79);
+var _LoginScreen = __webpack_require__(80);
 
 var _LoginScreen2 = _interopRequireDefault(_LoginScreen);
 
-var _PrivateRoute = __webpack_require__(81);
+var _PrivateRoute = __webpack_require__(82);
 
 var _PrivateRoute2 = _interopRequireDefault(_PrivateRoute);
 
@@ -2464,10 +2464,26 @@ var App = function (_Component) {
   function App() {
     _classCallCheck(this, App);
 
-    return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
+    var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
+
+    _this.search = _this.search.bind(_this);
+    return _this;
   }
 
   _createClass(App, [{
+    key: 'search',
+    value: function search() {
+      console.log('hey');
+      fetch('/searchbar', {
+        method: 'POST',
+        body: {
+          searchterm: "developer"
+        }
+      }).then(function (resp) {
+        return console.log(resp);
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
       return _react2.default.createElement(
@@ -2480,7 +2496,7 @@ var App = function (_Component) {
               return _react2.default.createElement(_LoginScreen2.default, null);
             } }),
           _react2.default.createElement(_reactRouterDom.Route, { path: '/register', render: function render() {} }),
-          _react2.default.createElement(_PrivateRoute2.default, { path: '/home', component: _Homepage2.default, isAuth: true })
+          _react2.default.createElement(_PrivateRoute2.default, { path: '/home', component: _Homepage2.default, isAuth: true, search: this.search })
         )
       );
     }
@@ -25659,7 +25675,7 @@ var _List = __webpack_require__(78);
 
 var _List2 = _interopRequireDefault(_List);
 
-var _Searchbar = __webpack_require__(82);
+var _Searchbar = __webpack_require__(79);
 
 var _Searchbar2 = _interopRequireDefault(_Searchbar);
 
@@ -25669,7 +25685,7 @@ var Homepage = function Homepage() {
     return _react2.default.createElement(
         'div',
         { className: 'Homepage' },
-        _react2.default.createElement(_Searchbar2.default, null),
+        _react2.default.createElement(_Searchbar2.default, { search: undefined.props.search }),
         _react2.default.createElement(_List2.default, { title: 'Relevant Jobs' }),
         _react2.default.createElement(_List2.default, { title: 'You have Applied To These Jobs:' })
     );
@@ -25743,6 +25759,38 @@ exports.default = List;
 
 
 Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SearchBar = function SearchBar() {
+  return _react2.default.createElement(
+    "div",
+    null,
+    _react2.default.createElement("input", { type: "text", "class": "searchTerm", placeholder: "What are you looking for?" }),
+    _react2.default.createElement(
+      "button",
+      { onClick: undefined.props.search },
+      "Search"
+    )
+  );
+};
+
+exports.default = SearchBar;
+
+/***/ }),
+/* 80 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
@@ -25754,7 +25802,7 @@ var _reactDom = __webpack_require__(13);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _Login = __webpack_require__(80);
+var _Login = __webpack_require__(81);
 
 var _Login2 = _interopRequireDefault(_Login);
 
@@ -25771,7 +25819,7 @@ var LoginScreen = function LoginScreen() {
 exports.default = LoginScreen;
 
 /***/ }),
-/* 80 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25848,7 +25896,7 @@ var Login = function (_Component) {
 exports.default = Login;
 
 /***/ }),
-/* 81 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -25898,30 +25946,6 @@ var PrivateRoute = function (_Component) {
 }(_react.Component);
 
 exports.default = PrivateRoute;
-
-/***/ }),
-/* 82 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var SearchBar = function SearchBar() {
-
-    return _react2.default.createElement("input", { type: "text", "class": "searchTerm", placeholder: "What are you looking for?" });
-};
-
-exports.default = SearchBar;
 
 /***/ })
 /******/ ]);
