@@ -203,5 +203,4 @@ async function run(SEARCH_QUERY) {
   return EASYAPPLYJOBS;
 } 
 // run('developer');
-
 module.exports = run;
