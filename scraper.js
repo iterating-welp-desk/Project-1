@@ -1,28 +1,27 @@
 const puppeteer = require('puppeteer');
 const CREDS = require('./creds');
-const util = require('util');
 
 // const moongoose = require('mongoose');
-// const User = require('./models/user'); 
+// const User = require('./models/user');
 
-async function run(SEARCH_QUERY) {
+const apply = async (SEARCH_QUERY) => {
   // instantiating a browser - with property headless: false (so we can see it working)
-  // By default, it is true. 
+  // By default, it is true.
   const browser = await puppeteer.launch({
-    headless: false
+    headless: false,
   });
 
-  // now we need to instantiate a new page 
+  // now we need to instantiate a new page
   const page = await browser.newPage();
 
   page.setViewport({
     width: 1366,
-    height: 768
+    height: 768,
   });
 
   await page.goto('https://www.glassdoor.com/').catch(err => console.log(err));
 
-  // Signing in: 
+  // Signing in:
   // setting sign-in link string id to a variable
   const SIGNIN_SELECTOR = '.sign-in';
   await page.click(SIGNIN_SELECTOR).catch(err => console.log(err));
@@ -30,7 +29,7 @@ async function run(SEARCH_QUERY) {
   const EMAIL_SELECTOR = '#signInUsername';
   const PW_SELECTOR = '#signInPassword';
   const SIGNIN_BTN = '#signInBtn';
-  /* * * * * 
+  /* * * * *
     wait for all selectors and btn to be on page
   * * * * */
   await page.waitFor(3000).catch(err => console.log(err));
@@ -42,26 +41,26 @@ async function run(SEARCH_QUERY) {
   await page.keyboard.type(CREDS.email).catch(err => console.log(err));
   await page.click(PW_SELECTOR).catch(err => console.log(err));
   await page.keyboard.type(CREDS.password).catch(err => console.log(err));
-  
+
   await page.click(SIGNIN_BTN).catch(err => console.log(err));
 
   await page.waitForNavigation().catch(err => console.log(err));
 
   // const SEARCH_QUERY = 'java developer';
   const URL = `https://www.glassdoor.com/Job/jobs.htm?clickSource=searchBtn&typedKeyword=${SEARCH_QUERY}&sc.keyword=${SEARCH_QUERY}`;
-  
+
   await page.goto(URL).catch(err => console.log(err));
 
   const EASYAPPLYJOBS = [];
 
-  /* * * * * 
-      Navigates to every pagination page in results and collects the links to the job listings that can be applied to using 'Easy Apply' and puts then into an array
-    * * * * */
+  /* * * * *
+    Navigates to every pagination page in results and collects the links to the job listings that can be applied to using 'Easy Apply' and puts then into an array
+  * * * * */
   const NEXT_PAGE_SELECTOR = 'li.next';
   let nextExists = true;
   let count = 0;
   while (count < 1) {
-    /* * * * * 
+    /* * * * *
       check if module pops up and close -- GlassDoor has an module that pops up each time a pagination page is navigated to
     * * * * */
     // waiting for module to load
@@ -74,12 +73,11 @@ async function run(SEARCH_QUERY) {
       await page.click('.mfp-close').catch(err => console.log(err));
     }
 
-    /* * * * * 
+    /* * * * *
       -> iterating through all li elements that contain the job listings and checking if they contain the easy apply element indicating that the job can be applied through GlassDoor's website
       -> then retrieves all href attributes for the links to those listings
     * * * * */
     const temp = await page.evaluate(() => {
-
       // put all li elements containing job results into an array
       const jobListElems = Array.from(document.getElementsByClassName('jl'));
 
@@ -119,7 +117,7 @@ async function run(SEARCH_QUERY) {
 
     EASYAPPLYJOBS.push(...temp);
 
-    /* * * * * 
+    /* * * * *
       check if next tab exists - attempt to figure out when the pagination ends but needs modification because next tab always exists --- even when at the last pagination page
     * * * * */
     nextExists = await page.evaluate(() => {
@@ -130,13 +128,11 @@ async function run(SEARCH_QUERY) {
     if (nextExists) await page.click(NEXT_PAGE_SELECTOR).catch(err => console.log(err));
   }
 
-  /* * * * * 
+  /* * * * *
     Looping through all of the links in the array and applying to those jobs
   * * * * */
   for(let i = 0; i < EASYAPPLYJOBS.length - 1; i += 1) {
-    
-
-    /* * * * * 
+    /* * * * *
       -> Go to the page
       -> Check for module
       -> Click the apply button
@@ -147,7 +143,7 @@ async function run(SEARCH_QUERY) {
     console.log('Going to apply page');
     await page.goto(EASYAPPLYJOBS[i].link).catch(err => console.log(err));
 
-    /* * * * * 
+    /* * * * *
       Sometimes GlassDoor has a random module pop up with information, so this will allow us to close that module
     * * * * */
     console.log('Checking for module');
@@ -201,6 +197,6 @@ async function run(SEARCH_QUERY) {
 
   browser.close();
   return EASYAPPLYJOBS;
-} 
+};
 // run('developer');
-module.exports = run;
+module.exports = apply;

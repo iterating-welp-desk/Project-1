@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-import List from './List'
-import Searchbar from './Searchbar'
+import React, { Component } from 'react';
+import List from './List';
+import Searchbar from './Searchbar';
 
 class Homepage extends Component {
   constructor(props) {
@@ -18,5 +17,4 @@ class Homepage extends Component {
   }
 }
 
-
- module.exports = Homepage;
+export default Homepage;

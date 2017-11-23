@@ -1,10 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 class Login extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
   }
-
   render(){
     return(
       <div>
@@ -15,4 +14,5 @@ class Login extends Component {
     )
   }
 }
-export default Login
+
+export default Login;
